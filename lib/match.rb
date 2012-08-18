@@ -42,6 +42,7 @@ class Match
       scores = { :racers => [{:name => @team_name1, :score => @score1},
                              {:name => @team_name2, :score => @score2}] }
       @server.config['channel'] << JSON.generate(scores)
+      @server.logger.info "Sending #{JSON.generate(scores)}"
       @seconds_left -= PERIOD
       if @seconds_left <= 0.0
         @seconds_left = 0.0
