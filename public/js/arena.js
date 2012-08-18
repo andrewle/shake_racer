@@ -5,6 +5,7 @@ var racers = [
   ];
 var registry = null;
 var ws = null;
+var percentages = null;
 
 // keep track of the number of times the websocket has connected
 var numTimesConnected = 0;
@@ -41,19 +42,7 @@ function handleMessage(message) {
 }
 
 function matchEnded(message) {
-    var fill = $('#racer' + 1 + ' .fill');
-    x0 = parseInt(fill.css('height'));
-
-    var fill = $('#racer' + 2 + ' .fill');
-    x1 = parseInt(fill.css('height'));
-
-    console.log(x0 + ' , ' + x1);
-
-    if(x0 > x1) {
-        var winner = "blue";
-    } else {
-        var winner = "red";
-    }
+    var winner = percentages[0] > percentages[1] : 'blue' ? 'red';
 
     $('#banner').html(winner + ' wins!');
     $('#banner').show();
@@ -95,6 +84,7 @@ function updateUpcomingRaces() {
  */
 function redraw() {
   var i;
+  percentages = [];
 
   for(i = 0; i < racers.length; i++) {
     var racerIdx = i+1;
@@ -104,6 +94,7 @@ function redraw() {
     // how full the container should be
     var score = racers[i].score
     var fillPercentage = (score / maxValue) * 100;
+    percentages.push(fillPercentage);
 
     if(fillPercentage >= 100) {
         $('#banner').html(racers[i]);
