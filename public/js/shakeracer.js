@@ -30,6 +30,7 @@ $(document).ready(function() {
     if(data.count === 0) {
       window.ondevicemotion = function (event) {
         var message = JSON.stringify({
+          team: endpoint,
           x: event.acceleration.x,
           y: event.acceleration.y,
           z: event.acceleration.z
