@@ -32,7 +32,7 @@ function handleMessage(message) {
 
         break;
       default:
-        alert('Unknown event "' + message.event + '"');
+        console.log('Unknown event "' + message.event + '"');
   }
 }
 
