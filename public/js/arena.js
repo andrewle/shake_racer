@@ -47,6 +47,8 @@ function matchEnded(message) {
     var fill = $('#racer' + 1 + ' .fill');
     x1 = parseInt(fill.css('height'));
 
+    console.log(x0 + ' , ' + x1);
+
     if(x0 > x1) {
         var winner = "blue";
     } else {
