@@ -53,6 +53,7 @@ class Match < ApplicationModel
     @seconds_left = MATCH_SECONDS
     @timer = EM.add_periodic_timer(PERIOD_SECONDS) do
       @seconds_left -= PERIOD_SECONDS
+      send_score
       check_if_game_over(&block)
     end
   end
@@ -87,7 +88,7 @@ class Match < ApplicationModel
       :racers => [{:name => @team_names[0], :score => @scores[0]},
                   {:name => @team_names[1], :score => @scores[1]}]
     }
-    send_message(message, 'arena.update_score')
+    send_message(message, 'arena.update_scores')
   end
 
   def send_new_match

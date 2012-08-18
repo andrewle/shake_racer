@@ -19,13 +19,13 @@ class ShakeRacer < Goliath::WebSocket
     env['subscription_id'] = env.channel.connect(env)
 
     if env.teams[:blue] >= 1 && env.teams[:red] >= 1
-      env.registry.matches << Match.new(env, "blue", "red")
+      env.registry.matches << Match.new(self, "blue", "red")
       env.registry.start_next_match
     end
   end
 
   def on_message(env, msg)
-    env.logger.info("WS MESSAGE: #{msg}")
+    # env.logger.info("WS MESSAGE: #{msg}")
     env.registry.inject(msg, env)
   end
 
@@ -48,13 +48,15 @@ class ShakeRacer < Goliath::WebSocket
     case env['REQUEST_PATH']
     when '/blue'
       env['subscriptions'] = "team.blue"
+      env['team_name'] = "blue"
       env.teams[:blue] += 1
       super(env)
     when '/red'
       env['subscriptions'] = "team.red"
+      env['team_name'] = "red"
       env.teams[:red] += 1
       super(env)
-    when '/arena_ws'
+    when '/ws'
       env["subscriptions"] = "arena.#"
       super(env)
     end
