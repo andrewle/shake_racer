@@ -3,6 +3,13 @@ var racers = [0, 0];
 
 function debug(str) { };
 
+function handleMessage(message) {
+  if(message.racers) {
+    racers = message.racers;
+    redraw();
+  }
+}
+
 /**
  * Redraw the racer bars based on the racers array.
  *
