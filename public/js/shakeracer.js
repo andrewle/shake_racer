@@ -37,7 +37,7 @@ $(document).ready(function() {
   });
 
   $('body').on('update', function (event, data) {
-    alert(data.message);
+    console.log(data);
   });
 
   window.ondevicemotion = function (event) {
