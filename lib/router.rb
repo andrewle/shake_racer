@@ -1,7 +1,10 @@
 require_relative "routing_map"
 
 class Router
-  def initialize
+  attr_reader :logger
+
+  def initialize(logger = Log4r::Logger.root)
+    @logger = logger
     @subscriptions = {}
     @routing_map   = RoutingMap.new
     @uid  = 0

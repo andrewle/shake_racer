@@ -30,6 +30,7 @@ class Registry < ApplicationModel
     env['team_name'] = team_name
     env.channel.subscribe("team.#{team_name}", env['subscription_id'], env)
     send_success("register", env)
+    send_update
     # send_error("register", "Too many members", env)
   end
 

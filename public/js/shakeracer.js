@@ -36,6 +36,10 @@ $(document).ready(function() {
     alert(data.message);
   });
 
+  $('body').on('update', function (event, data) {
+    alert(data.message);
+  });
+
   window.ondevicemotion = function (event) {
     return;
     // nothing to do if there websocket is not connected
