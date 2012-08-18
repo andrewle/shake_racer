@@ -49,7 +49,7 @@ class Match < ApplicationModel
   def countdown(count = COUNTDOWN_SECONDS, &block)
     send_countdown(count)
     EM.add_timer(1) do
-      if count > 1
+      if count > 0
         countdown(count - 1, &block)
       else
         yield
