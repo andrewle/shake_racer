@@ -1,5 +1,8 @@
 var maxValue = 100;
-var racers = [0, 0];
+var racers = [
+  {name: "Racer 1", score: 0},
+  {name: "Racer 2", score: 0}
+  ];
 
 function debug(str) { };
 
@@ -25,7 +28,8 @@ function redraw() {
     var fill = $(selector);
 
     // how full the container should be
-    var fillPercentage = (racers[i] / maxValue) * 100;
+    var score = racers[i].score
+    var fillPercentage = (score / maxValue) * 100;
 
     // the percentage from the top of the container div the fill container should be
     var topPercentage = 100 - fillPercentage;
@@ -33,6 +37,10 @@ function redraw() {
     // update the racer's CSS
     fill.css('height', fillPercentage + '%');
     fill.css('top', topPercentage + '%');
+
+    // update the racer's name
+    var selector = '#racer' + racerIdx + ' .name';
+    $(selector).html(racers[i].name);
   }
 }
 
