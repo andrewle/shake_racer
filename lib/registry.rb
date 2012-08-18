@@ -65,6 +65,7 @@ class Registry < ApplicationModel
     if match = matches.first
       send_update
       match.start! do
+        send_message({ :event => "match_ended" }, "") # forward to all
         matches.shift
         EM.add_timer(INTER_MATCH_SECONDS) do
           start_next_match

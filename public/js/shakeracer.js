@@ -38,6 +38,11 @@ $(document).ready(function() {
     ws.send(message);
   }
 
+  $('body').on("match_ended", function(event, data) {
+    alert("Game, set, and match!");
+    window.location.pathname = "/index.html";
+  });
+
   $('body').on("countdown", function(event, data) {
     // when the count is 0, grab all motion
     if(data.count === 0) {
