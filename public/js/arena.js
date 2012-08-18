@@ -42,7 +42,7 @@ function countdown(count) {
 }
 
 function newMatch() {
-  $('#curtain').fadeTo(125, 0.9);
+  $('#curtain').fadeTo(125, 1.0);
   $('#curtain .match').html('MATCH VS MATCH');
   countdown('');
 }
