@@ -4,6 +4,7 @@ var racers = [
   {name: "Racer 2", score: 0}
   ];
 var registry = null;
+var ws = null;
 
 function debug(str) { };
 
@@ -86,15 +87,25 @@ function redraw() {
   }
 }
 
-$(function () {
-  var host = window.location.host;
-  var ws = new WebSocket("ws://" + host + "/ws");
+function connect() {
+  debug("connecting ...");
 
-  ws.onclose = function () { debug("socket closed"); };
+  var host = window.location.host;
+  ws = new WebSocket("ws://" + host + "/ws");
+
+  ws.onclose = function () {
+    debug("socket closed");
+    setTimeout('connect();', 1000);
+  };
+
   ws.onopen = function () { debug("connected..."); };
 
   ws.onmessage = function (evt) {
     //$("#msg").append("<p>" + evt.data + "</p>");
     handleMessage(JSON.parse(evt.data));
   };
+}
+
+$(function () {
+    connect();
 });
