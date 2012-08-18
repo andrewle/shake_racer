@@ -6,7 +6,6 @@ require 'goliath/websocket'
 
 require_relative 'lib/registry'
 require_relative 'lib/team'
-require_relative 'lib/member'
 require_relative 'lib/match'
 require_relative 'lib/router'
 
@@ -32,6 +31,7 @@ class ShakeRacer < Goliath::WebSocket
   end
 
   def on_close(env)
+    env.registry.dec_members(env)
     env.logger.info("WS CLOSED")
     env.channel.disconnect(env['subscription_id'])
   end
