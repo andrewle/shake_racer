@@ -32,6 +32,7 @@ class ShakeRacer < Goliath::WebSocket
   end
 
   def on_close(env)
+    env.registry.dec_members(env)
     env.logger.info("WS CLOSED")
     env.channel.disconnect(env['subscription_id'])
   end
