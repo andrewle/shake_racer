@@ -54,6 +54,14 @@ html, body, #main, #arena, #racer-container {
   background-color: #F7F7F7;
 }
 
+#racer1 {
+  background-color: #006;
+}
+
+#racer2 {
+  background-color: #600;
+}
+
 .racer .name {
   position: absolute;
   left: 0px;
