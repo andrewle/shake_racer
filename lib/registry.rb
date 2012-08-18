@@ -67,9 +67,6 @@ class Registry < ApplicationModel
       match.start! do
         send_message({ :event => "match_ended" }, "") # forward to all
         matches.shift
-        EM.add_timer(INTER_MATCH_SECONDS) do
-          start_next_match
-        end unless matches.empty?
       end
     end
   end
