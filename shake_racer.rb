@@ -12,7 +12,7 @@ require_relative 'lib/match'
 class ShakeRacer < Goliath::WebSocket
   use(Rack::Static,
       :root => Goliath::Application.app_path("public"),
-      :urls => ['/arena.html', '/index.html', '/css', '/themes', '/js', '/img'])
+      :urls => ['/test_phonegap.html', '/arena.html', '/index.html', '/css', '/themes', '/js', '/img'])
 
   def on_open(env)
     env.logger.info("WS OPEN")
