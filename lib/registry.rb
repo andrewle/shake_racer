@@ -16,6 +16,8 @@ class Registry < ApplicationModel
     dispatch(message_hash)
   end
 
+  private
+
   def dispatch(message_hash)
     dispatch_method = "dispatch_#{message_hash['event']}"
     respond_to(dispatch_method) or raise ArgumentError "Unknown event #{message_hash.inspect}"
@@ -70,12 +72,7 @@ class Registry < ApplicationModel
     end
   end
 
-  def to_hash
-    {
-      matches:  @matches.map(&:to_hash),
-      teams:    @teams  .map(&:to_hash)
-    }
-  end
+  # Message senders
 
   def send_update
     message =
@@ -84,6 +81,13 @@ class Registry < ApplicationModel
       registry: to_hash
     }
     send_message(message, '')
+  end
+
+  def to_hash
+    {
+      matches:  @matches.map(&:to_hash),
+      teams:    @teams  .map(&:to_hash)
+    }
   end
 
   def to_json
