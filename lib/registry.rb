@@ -38,7 +38,7 @@ class Registry < ApplicationModel
   def send_update
     message =
     {
-      key:      'Update',
+      event:    'Update',
       registry: to_hash
     }
     send_message(message)
