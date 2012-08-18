@@ -1,12 +1,12 @@
-require 'json'
+require_relative 'application_model'
 
-class Registry
+class Registry < ApplicationModel
   attr_accessor :matches, :teams
 
   INTER_MATCH_DELAY = 3.0
 
   def initialize(server)
-    @server = server
+    super(server)
     @matches = [] # ordered
     @teams = []
   end
