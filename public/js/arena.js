@@ -77,12 +77,8 @@ function redraw() {
     var score = racers[i].score
     var fillPercentage = (score / maxValue) * 100;
 
-    // the percentage from the top of the container div the fill container should be
-    var topPercentage = 100 - fillPercentage;
-
     // update the racer's CSS
-    fill.css('height', fillPercentage + '%');
-    fill.css('top', topPercentage + '%');
+    fill.css('height', (100 - fillPercentage) + '%');
 
     // update the racer's name
     var selector = '#racer' + racerIdx + ' .name';

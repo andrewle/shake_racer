@@ -42,7 +42,7 @@ html, body, #main, #arena, #racer-container {
   height: 100%;
   width: 200px;
   display: inline-block;
-  background-color: #F7F7F7;
+  background-color: #AAAAAA;
 }
 
 .racer .fill {
@@ -50,8 +50,8 @@ html, body, #main, #arena, #racer-container {
   left: 0px;
   top: 0px;
   width: 100%;
-  height: 0%;
-  background-color: #AAAAAA;
+  height: 100%;
+  background-color: #F7F7F7;
 }
 
 .racer .name {
