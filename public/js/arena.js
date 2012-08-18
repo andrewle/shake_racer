@@ -41,10 +41,10 @@ function handleMessage(message) {
 }
 
 function matchEnded(message) {
-    var fill = $('#racer' + 0 + ' .fill');
+    var fill = $('#racer' + 1 + ' .fill');
     x0 = parseInt(fill.css('height'));
 
-    var fill = $('#racer' + 1 + ' .fill');
+    var fill = $('#racer' + 2 + ' .fill');
     x1 = parseInt(fill.css('height'));
 
     console.log(x0 + ' , ' + x1);
