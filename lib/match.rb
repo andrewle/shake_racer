@@ -24,7 +24,7 @@ class Match < ApplicationModel
       :event => "Countdown",
       :count => count
     }
-    send_message(message)
+    send_message(message, '')
   end
 
   def send_score
@@ -34,7 +34,7 @@ class Match < ApplicationModel
       :racers => [{:name => @team_names[0], :score => @scores[0]},
                   {:name => @team_names[1], :score => @scores[1]}]
     }
-    send_message(message)
+    send_message(message, 'arena.update_score')
   end
 
   def send_new_match
@@ -43,7 +43,7 @@ class Match < ApplicationModel
       :event  => 'NewMatch',
       :match  => to_hash
     }
-    send_message(message)
+    send_message(message, '')
   end
 
   def countdown(count = COUNTDOWN_SECONDS, &block)
@@ -64,26 +64,34 @@ class Match < ApplicationModel
     end
   end
 
-  def update_score
-    increment = rand(4)
-    player = rand < 0.5 ? 0 : 1
-    @scores[player] = [@scores[player] + increment, 100].min
+  def check_if_game_over
+    @seconds_left = 0 if @scores.max >= 100
+    if @seconds_left <= 0.0
+      @seconds_left = 0.0
+      if @timer
+        @timer.cancel
+        @timer = nil
+      end
+      @server.logger.info("#{match_name} match over!")
+      yield # done!
+    end
   end
 
-  def run!
+  def run!(&block)
     @seconds_left = MATCH_SECONDS
-    timer = EM.add_periodic_timer(PERIOD_SECONDS) do
-      update_score
-      send_score
+    @timer = EM.add_periodic_timer(PERIOD_SECONDS) do
       @seconds_left -= PERIOD_SECONDS
-      @seconds_left = 0 if @scores.max >= 100
-      if @seconds_left <= 0.0
-        @seconds_left = 0.0
-        timer.cancel
-        @server.logger.info("#{match_name} match over!")
-        yield # done!
-      end
+      check_if_game_over(&block)
     end
+  end
+
+  def shake(team_name)
+    team_names.each_with_index { |team, index| team_index = index if team == team_name }
+    team_index or raise ArgumentError "Team #{team_name} not found in #{to_hash.inspect}"
+    increment = rand(4)
+    player = rand < 0.5 ? 0 : 1
+    @scores[team_index] = [@scores[team_index] + increment, 100].min
+    send_score
   end
 
   def to_hash

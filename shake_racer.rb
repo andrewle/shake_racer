@@ -28,7 +28,7 @@ class ShakeRacer < Goliath::WebSocket
 
   def on_message(env, msg)
     env.logger.info("WS MESSAGE: #{msg}")
-    env.channel.send(msg, "arena.update")
+    env['registry'].inject(msg)
   end
 
   def on_close(env)
