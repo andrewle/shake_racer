@@ -24,93 +24,16 @@
 
       <div data-role="content">
         <p>
-          Welcome to ShakeRacer. Enter your team name and shake your way to the
-          top! Teams can have a maximum of 2 players each.
+          Welcome to ShakeRacer. Pick a team:
         </p>
 
         <form id="join_team" action="/" data-ajax="false" method="post">
-          <div data-role="fieldcontain" class="ui-hide-label">
-            <label for="team-name">Team Name:</label>
-            <input type="text" name="team-name" id="team-name" value="" placeholder="Team Name"/>
-          </div>
-
-          <input type="submit" value="Join!" />
+          <a href="#the_match" data-role="button">Red Team</a>
+          <br/>
+          <br/>
+          <a href="#the_match" data-role="button">Blue Team</a>
         </form>
       </div>
-    </div>
-
-    <div data-role="page" id="main_menu">
-      <div data-role="header" data-position="inline">
-        <h1>ShakeRacer</h1>
-      </div>
-
-      <div data-role="content">
-        <ul data-role="listview" data-theme="a">
-          <li><a href="#challenge_team" data-transition="slide">Challenge a Team</a></li>
-          <li><a href="#matches" data-transition="slide">Matches</a></li>
-          <li><a href="#the_match" data-transition="slide">The Match</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <div data-add-back-btn="true" data-role="page" data-them="a" id="challenge_team">
-      <div data-role="header" data-position="inline">
-        <a href="javascript:void(0);" class="ui-btn-left ui-btn ui-shadow ui-btn-corner-all ui-btn-icon-left ui-btn-up-a" data-rel="back" data-icon="arrow-l" data-theme="a" data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">Back</span><span class="ui-icon ui-icon-arrow-l ui-icon-shadow">&nbsp;</span></span></a>
-        <h1>Challenge a Team</h1>
-      </div>
-
-      <ul data-role="listview" data-theme="a">
-        <li>
-          crazy Monkey town killers
-          <button class="send-challenge" data-role="button" data-mini="true" data-inline="true" data-theme="a">
-            Send Challenge
-          </button>
-        </li>
-
-        <li>
-          Mofos
-          <button class="accept-challenge" data-role="button" data-mini="true" data-inline="true" data-theme="a">
-            Accept Challenge
-          </button>
-        </li>
-
-        <li>
-          The Marys
-          <span class="ui-li-count badge" data-theme="a">
-            Challenge Sent
-          </span>
-        </li>
-
-        <li>
-          The Warhols
-          <span class="ui-li-count badge" data-theme="a">
-            Match Queued
-          </span>
-        </li>
-      </ul>
-    </div>
-
-    <div data-add-back-btn="true" data-role="page" id="matches">
-      <div data-role="header" data-position="inline">
-        <a href="javascript:void(0);" class="ui-btn-left ui-btn ui-shadow ui-btn-corner-all ui-btn-icon-left ui-btn-up-a" data-rel="back" data-icon="arrow-l" data-theme="a" data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">Back</span><span class="ui-icon ui-icon-arrow-l ui-icon-shadow">&nbsp;</span></span></a>
-        <h1>Matches</h1>
-      </div>
-
-      <ul data-role="listview" data-theme="a">
-        <li class="current_match">
-          The Marys VS crazy Monkey town killers
-          <span class="ui-li-count badge" data-theme="a">
-            Current Match
-          </span>
-        </li>
-
-        <li>
-          Mofos VS crazy Monkey town killers
-          <span class="ui-li-count badge" data-theme="a">
-            My Match
-          </span>
-        </li>
-      </ul>
     </div>
 
     <div data-add-back-btn="true"  data-content-theme="a" data-role="page" id="the_match">
