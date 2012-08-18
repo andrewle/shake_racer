@@ -36,9 +36,19 @@ class Match
     end
   end
 
+  def update_score
+    increment = rand(4)
+    if rand < 0.5
+      @score1 += increment
+    else
+      @score2 += increment
+    end
+  end
+
   def run!
     @seconds_left = MATCH_SECONDS
     timer = EM.add_periodic_timer(PERIOD) do
+      update_score
       scores = { :racers => [{:name => @team_name1, :score => @score1},
                              {:name => @team_name2, :score => @score2}] }
       @server.config['channel'] << JSON.generate(scores)
