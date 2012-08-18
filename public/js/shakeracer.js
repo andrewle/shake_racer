@@ -1,7 +1,4 @@
 $(document).ready(function() {
-  // TODO: this should likely be a scoped variable, leaving global for testing
-  watchAccelerationId = null;
-
   var player = {
     hasJoinedTeam: false
   };
@@ -38,38 +35,17 @@ $(document).ready(function() {
     return false;
   });
 
-  function debug(str) { }
+  window.ondevicemotion = function (event) {
+    return;
+    // nothing to do if there websocket is not connected
+    if(!ws) { return; }
 
-  function startRace() {
-    watchAccelerationId = navigator.accelerometer.watchAcceleration(
-      getAcceleration, accelerationError, {frequency: 40}
-    );
-  }
+    var message = JSON.stringify({
+      x: event.acceleration.x,
+      y: event.acceleration.y,
+      z: event.acceleration.z
+    });
 
-  function stopRace() {
-    if(watchAccelerationId) {
-        navigator.acceleration.clearWatch(watchAccelerationId);
-    }
-  }
-
-  function getAcceleration(acceleration) {
-      debug('Acceleration X: ' + acceleration.x + '\n' +
-            'Acceleration Y: ' + acceleration.y + '\n' +
-            'Acceleration Z: ' + acceleration.z + '\n' +
-            'Timestamp: '      + acceleration.timestamp + '\n');
-
-      var message = JSON.stringify({
-        event: "shake",
-        acceleration: [acceleration.x, acceleration.y, acceleration.z]
-      })
-
-      if(ws) {
-        ws.send(message);
-      }
-  }
-
-  // accelerationError: Failed to get the acceleration
-  function accelerationError() {
-      alert('Cannot race, error getting acceleration!');
+    ws.send(message);
   }
 });
