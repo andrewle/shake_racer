@@ -71,7 +71,7 @@ class Match < ApplicationModel
   def send_countdown(count)
     message =
     {
-      :event => "Countdown",
+      :event => "countdown",
       :count => count
     }
     send_message(message, '')
@@ -80,7 +80,7 @@ class Match < ApplicationModel
   def send_score
     message =
     {
-      :event  => 'UpdateScores',
+      :event  => 'update_scores',
       :racers => [{:name => @team_names[0], :score => @scores[0]},
                   {:name => @team_names[1], :score => @scores[1]}]
     }
@@ -90,7 +90,7 @@ class Match < ApplicationModel
   def send_new_match
     message =
     {
-      :event  => 'NewMatch',
+      :event  => 'new_match',
       :match  => to_hash
     }
     send_message(message, '')
