@@ -1,16 +1,15 @@
 var maxValue = 100;
 var data = [0, 0];
 
-function update() {
-  var index = Math.random() < 0.5 ? 0 : 1;
-
-  data[index] += parseInt(Math.random() * 5);
-  data[index] = Array.min([maxValue, data[index]]);
-}
-
+/**
+ * Redraw the racer bars based on the data array.
+ *
+ * The data array holds the racers' progress.  The bar will be filled relative
+ * to the value in the array.
+ */
 function redraw() {
   var i;
-  console.log(data);
+
   for(i = 0; i < data.length; i++) {
     var racerIdx = i+1;
     var selector = '#racer' + racerIdx + ' .fill';
@@ -27,16 +26,3 @@ function redraw() {
     fill.css('top', topPercentage + '%');
   }
 }
-
-function next() {
-  update();
-  redraw();
-
-  if(Array.max(data) >= maxValue) {
-    clearInterval(interval);
-  }
-}
-
-var interval = setInterval(function () {
-  next();
-}, 50);
