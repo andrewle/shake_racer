@@ -28,7 +28,7 @@ function handleMessage(message) {
 
         break;
       case "new_match":
-        newMatch();
+        newMatch(message);
 
         break;
       default:
@@ -43,9 +43,11 @@ function countdown(count) {
   }
 }
 
-function newMatch() {
+function newMatch(message) {
+  var team_names = message['match']['team_names'];
+
   $('#curtain').fadeTo(125, 1.0);
-  $('#curtain .match').html('MATCH VS MATCH');
+  $('#curtain .match').html(team_names[0] + ' VS ' + team_names[1]);
   countdown('');
 }
 
