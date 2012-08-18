@@ -1,7 +1,7 @@
 require_relative 'application_model'
 
 class Team < ApplicationModel
-  attr_accessor :name
+  attr_accessor :name, :members
 
   def initialize(server, name)
     super(server)

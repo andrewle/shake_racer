@@ -2,40 +2,41 @@ $(document).ready(function() {
   // TODO: this should likely be a scoped variable, leaving global for testing
   watchAccelerationId = null;
 
-  var player = {
-    hasJoinedTeam: false
-  };
-
-  if (!("WebSocket" in window)) {
-    alert("Sorry, WebSockets unavailable.");
-    return;
-  }
-
-  if (player.hasJoinedTeam === false) {
-    window.location.hash = "#";
-  }
-
-  $("#join_team").submit(function (event) {
-    event.preventDefault();
-    window.location.hash = "#main_menu"
-  });
-
   var host = window.location.host;
   var ws = new WebSocket("ws://" + host + "/ws");
 
   ws.onmessage = function (evt) {
+    var data = JSON.parse(evt.data);
+    if (data.event === undefined) { return; }
+    $('body').trigger(data.event, data);
   };
 
   ws.onclose = function () {
     alert("Alert connection to server lost.");
   };
 
-  $('#submit').click(function () {
-    var nick = $('#nick').val();
-    var msg = $('#message').val();
+  var player = new Player(ws);
 
-    ws.send(nick + ": " + msg);
-    return false;
+  if (!("WebSocket" in window)) {
+    alert("Sorry, WebSockets unavailable.");
+    return;
+  }
+
+  if (player.hasJoinedTeam() === false) {
+    window.location.hash = "#";
+  }
+
+  $("#join_team").submit(function (event) {
+    event.preventDefault();
+    player.register($('#team-name').val());
+  });
+
+  $('body').on('register_success', function (event, data) {
+    window.location.hash = "#main_menu";
+  });
+
+  $('body').on('register_error', function (event, data) {
+    alert(data.message);
   });
 
   function debug(str) { }

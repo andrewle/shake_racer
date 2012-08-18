@@ -56,6 +56,9 @@ class Router
       @subscriptions[subscription_id] = EM::Callback(&conn)
       @routing_map.subscribe(subscriptions, subscription_id)
     end
+
+    client.logger.info "subscriptions: " + @subscriptions.inspect
+    client.logger.info "routing_map: " + @routing_map.inspect
   end
 
   private

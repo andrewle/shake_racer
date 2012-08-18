@@ -11,44 +11,46 @@ class Registry < ApplicationModel
     @teams = []
   end
 
-  def inject(message)
+  def inject(message, env)
     message_hash = JSON.parse(message)
-    dispatch(message_hash)
+    dispatch(message_hash, env)
   end
 
-  def dispatch(message_hash)
+  def dispatch(message_hash, env)
     dispatch_method = "dispatch_#{message_hash['event']}"
-    respond_to(dispatch_method) or raise ArgumentError "Unknown event #{message_hash.inspect}"
-    send(dispatch_method, message_hash)
+    respond_to?(dispatch_method) or raise ArgumentError, "Unknown event #{message_hash.inspect}"
+    send(dispatch_method, message_hash, env)
   end
 
-  def dispatch_Register(message_hash)
-    team_name = message_hash['team'] or raise ArgumentError "Missing team in #{message_hash.inspect}"
+  def dispatch_register(message_hash, env)
+    team_name = message_hash['team'] or raise ArgumentError, "Missing team in #{message_hash.inspect}"
     team = Team.new(server, team_name)
     team.members << Member.new(server, nil) # TODO: connection_id -Colin
     teams << team
-    server.env['team_name'] = team_name
-    server.env['channel'].subscribe("team.#{team_name}", server.env['subscription_id'], env)
+    env['team_name'] = team_name
+    env.channel.subscribe("team.#{team_name}", env['subscription_id'], env)
+    send_success("register", env)
+    # send_error("register", "Too many members", env)
   end
 
-  def dispatch_Challenge(message_hash)
-    from_team = message_hash['from_team'] or raise ArgumentError "Missing from_team in #{message_hash.inspect}"
-    to_team   = message_hash['to_team'  ] or raise ArgumentError "Missing to_team in #{message_hash.inspect}"
+  def dispatch_challenge(message_hash, env)
+    from_team = message_hash['from_team'] or raise ArgumentError, "Missing from_team in #{message_hash.inspect}"
+    to_team   = message_hash['to_team'  ] or raise ArgumentError, "Missing to_team in #{message_hash.inspect}"
     send_message(message_hash, "team.#{to_team}") # forward to all
     send_update
   end
 
-  def dispatch_Accept(message_hash)
-    from_team = message_hash['from_team'] or raise ArgumentError "Missing from_team in #{message_hash.inspect}"
-    to_team   = message_hash['to_team'  ] or raise ArgumentError "Missing to_team in #{message_hash.inspect}"
+  def dispatch_accept(message_hash, env)
+    from_team = message_hash['from_team'] or raise ArgumentError, "Missing from_team in #{message_hash.inspect}"
+    to_team   = message_hash['to_team'  ] or raise ArgumentError, "Missing to_team in #{message_hash.inspect}"
     matches << Match.new(server, from_team, to_team)
     send_message(message_hash, "team.#{from_team}") # forward to all
     send_update
   end
 
-  def dispatch_Shake(message_hash)
-    acceleration = message_hash['acceleration'] or raise ArgumentError "Missing acceleration in #{message_hash.inspect}"
-    match = matches.first or raise ArgumentError "Got Shake with no matches #{message_hash.inspect}"
+  def dispatch_shake(message_hash, env)
+    acceleration = message_hash['acceleration'] or raise ArgumentError, "Missing acceleration in #{message_hash.inspect}"
+    match = matches.first or raise ArgumentError, "Got Shake with no matches #{message_hash.inspect}"
     match.shake(env['team_name'])
   end
 
@@ -84,6 +86,21 @@ class Registry < ApplicationModel
       registry: to_hash
     }
     send_message(message, '')
+  end
+
+  def send_success(event, env)
+    message = {
+      :event => event + "_success"
+    }
+    env.stream_send(JSON.generate(message))
+  end
+
+  def send_error(event, error_message, env)
+    message = {
+      :event => event + "_error",
+      :message => error_message
+    }
+    env.stream_send(JSON.generate(message))
   end
 
   def to_json
