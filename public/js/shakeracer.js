@@ -1,13 +1,23 @@
-function debug(str) {
-  $("#debug").append("<p>" + str + "</p>");
-};
+function debug(str) { };
 
 $(document).ready(function() {
+  var player = {
+    hasJoinedTeam: false
+  };
 
   if (!("WebSocket" in window)) {
     alert("Sorry, WebSockets unavailable.");
     return;
   }
+
+  if (player.hasJoinedTeam === false) {
+    window.location.hash = "#";
+  }
+
+  $("#join_team").submit(function (event) {
+    event.preventDefault();
+    window.location.hash = "#main_menu"
+  });
 
   var host = window.location.host;
   var ws = new WebSocket("ws://" + host + "/ws");
@@ -24,6 +34,7 @@ $(document).ready(function() {
   });
 
   window.ondevicemotion = function (event) {
+    return;
     // nothing to do if there websocket is not connected
     if(!ws) { return; }
 

@@ -1,0 +1,46 @@
+body {
+  font-family: Helvetica, sans-serif;
+}
+
+.send-challenge .ui-button-inner,
+.accept-challenge .ui-button-inner {
+  font-size: 12px;
+}
+
+.ui-li-static .ui-btn-text {
+  font-size: 12px;
+}
+
+.badge {
+  font-size: 10.998px;
+  font-weight: bold;
+  line-height: 14px;
+  color: white;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  white-space: nowrap;
+  vertical-align: baseline;
+  background-color: #999;
+}
+
+.success {
+  background-color: #468847;
+}
+
+.current_match, .highlight {
+  background: #FADB4E /*{e-bar-background-color}*/;
+  color: #333 /*{e-bar-color}*/;
+  text-shadow: 0 /*{e-bar-shadow-x}*/ 1px /*{e-bar-shadow-y}*/ 0 /*{e-bar-shadow-radius}*/ white /*{e-bar-shadow-color}*/;
+  background-image: -webkit-gradient(linear, left top, left bottom, from( #FCEDA7 /*{e-bar-background-start}*/), to( #FBEF7E /*{e-bar-background-end}*/));
+  background-image: -webkit-linear-gradient( #FCEDA7 /*{e-bar-background-start}*/, #FBEF7E /*{e-bar-background-end}*/);
+  background-image: -moz-linear-gradient( #FCEDA7 /*{e-bar-background-start}*/, #FBEF7E /*{e-bar-background-end}*/);
+  background-image: -ms-linear-gradient( #FCEDA7 /*{e-bar-background-start}*/, #FBEF7E /*{e-bar-background-end}*/);
+  background-image: -o-linear-gradient( #FCEDA7 /*{e-bar-background-start}*/, #FBEF7E /*{e-bar-background-end}*/);
+  background-image: linear-gradient( #FCEDA7 /*{e-bar-background-start}*/, #FBEF7E /*{e-bar-background-end}*/);
+}
+
+#the_match {
+  background-color: #222;
+  color: #aaa;
+  font-size: 2.5em;
+  text-align: center;
+}
