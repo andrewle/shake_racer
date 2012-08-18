@@ -25,7 +25,7 @@ class Registry < ApplicationModel
   def dispatch_register(message_hash, env)
     team_name = message_hash['team'] or raise ArgumentError, "Missing team in #{message_hash.inspect}"
     if team = teams.find { |team| team.name == team_name }
-      if team.members >= 2
+      if team.members.size >= 2
         send_error('register', "Only 2 team members allowed", env)
         return
       end
