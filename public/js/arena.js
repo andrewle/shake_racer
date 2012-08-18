@@ -6,6 +6,9 @@ var racers = [
 var registry = null;
 var ws = null;
 
+// keep track of the number of times the websocket has connected
+var numTimesConnected = 0;
+
 function debug(str) { };
 
 function handleMessage(message) {
@@ -98,12 +101,21 @@ function connect() {
     setTimeout('connect();', 1000);
   };
 
-  ws.onopen = function () { debug("connected..."); };
+  ws.onopen = function () {
+    debug("connected...");
+    if(numTimesConnected++ > 0) {
+        reload();
+    }
+  };
 
   ws.onmessage = function (evt) {
     //$("#msg").append("<p>" + evt.data + "</p>");
     handleMessage(JSON.parse(evt.data));
   };
+}
+
+function reload() {
+    document.location = document.location.href;
 }
 
 $(function () {
