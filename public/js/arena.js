@@ -31,9 +31,30 @@ function handleMessage(message) {
         newMatch(message);
 
         break;
+      case "match_ended":
+        matchEnded(message);
+
+        break;
       default:
         console.log('Unknown event "' + message.event + '"');
   }
+}
+
+function matchEnded(message) {
+    var fill = $('#racer' + 0 + ' .fill');
+    x0 = parseInt(fill.css('height'));
+
+    var fill = $('#racer' + 1 + ' .fill');
+    x1 = parseInt(fill.css('height'));
+
+    if(x0 > x1) {
+        var winner = "blue";
+    } else {
+        var winner = "red";
+    }
+
+    $('#banner').html(winner + 'wins!');
+    $('#banner').show();
 }
 
 function countdown(count) {
