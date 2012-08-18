@@ -3,14 +3,51 @@ var racers = [
   {name: "Racer 1", score: 0},
   {name: "Racer 2", score: 0}
   ];
+var registry = null;
 
 function debug(str) { };
 
 function handleMessage(message) {
-  if(message.racers) {
-    racers = message.racers;
-    redraw();
+  switch(message.event) {
+      case "UpdateScores":
+        racers = message.racers;
+        redraw();
+
+        break;
+      case "Update":
+        registry = message.registry;
+        updateUpcomingRaces();
+
+        break;
+      case "Countdown":
+        countdown(message.count);
+
+        break;
+      case "NewMatch":
+        newMatch();
+
+        break;
   }
+}
+
+function countdown(count) {
+  $('#curtain .countdown').html(count);
+  if(count === 0) {
+    $('#curtain').fadeTo(50, 0.0);
+  }
+}
+
+function newMatch() {
+  $('#curtain').fadeTo(125, 0.9);
+  $('#curtain .match').html('MATCH VS MATCH');
+  countdown('');
+}
+
+function updateUpcomingRaces() {
+  $('#upcoming-races').html('');
+  $(registry.matches).each(function(i) {
+    $('#upcoming-races').append('<p>' + this.team_names[0] + ' VS ' + this.team_names[1] + '</p>');
+  });
 }
 
 /**
