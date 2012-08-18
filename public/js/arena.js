@@ -53,7 +53,7 @@ function matchEnded(message) {
         var winner = "red";
     }
 
-    $('#banner').html(winner + 'wins!');
+    $('#banner').html(winner + ' wins!');
     $('#banner').show();
 }
 

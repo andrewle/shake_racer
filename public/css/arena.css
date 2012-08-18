@@ -87,4 +87,6 @@ html, body, #main, #arena, #racer-container {
   left: 0;
   text-align: center;
   z-index: 1000;
+  background-color: transparent;
+  border: none;
 }
