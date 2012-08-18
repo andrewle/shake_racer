@@ -44,6 +44,11 @@ function newMatch() {
 }
 
 function updateUpcomingRaces() {
+  if(registry.matches.length === 0) {
+    $('#upcoming-races').html('No upcoming races.');
+    return;
+  }
+
   $('#upcoming-races').html('');
   $(registry.matches).each(function(i) {
     $('#upcoming-races').append('<p>' + this.team_names[0] + ' VS ' + this.team_names[1] + '</p>');
