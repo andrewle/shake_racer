@@ -41,6 +41,14 @@ body {
 #the_match {
   background-color: #222;
   color: #aaa;
-  font-size: 2.5em;
+  font-size: 2em;
   text-align: center;
+}
+
+#the_match.red_team {
+  background-color: #600;
+}
+
+#the_match.blue_team {
+  background-color: #006;
 }

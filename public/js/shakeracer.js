@@ -1,6 +1,6 @@
 $(document).ready(function() {
   var host = window.location.host;
-  var ws = new WebSocket("ws://" + host + "/ws");
+  var ws = new WebSocket("ws://" + host + "/" + endpoint);
 
   ws.onmessage = function (evt) {
     var data = JSON.parse(evt.data);
@@ -12,32 +12,17 @@ $(document).ready(function() {
     alert("Alert connection to server lost.");
   };
 
-  var player = new Player(ws);
-
   if (!("WebSocket" in window)) {
     alert("Sorry, WebSockets unavailable.");
     return;
   }
 
-  if (player.hasJoinedTeam() === false) {
-    window.location.hash = "#";
-  }
-
-  $("#join_team").submit(function (event) {
-    event.preventDefault();
-    player.register($('#team-name').val());
-  });
-
-  $('body').on('register_success', function (event, data) {
-    window.location.hash = "#main_menu";
-  });
-
-  $('body').on('register_error', function (event, data) {
-    alert(data.message);
-  });
-
-  $('body').on('update', function (event, data) {
-    console.log(data);
+  $('body').on("countdown", function(event, data) {
+    if (data.count > 0) {
+      $("#the_match h1").html(data.count);
+    } else {
+      $("#the_match h1").html("SHAKE IT");
+    }
   });
 
   $('body').on("countdown", function(event, data) {

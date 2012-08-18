@@ -13,7 +13,7 @@ require_relative 'lib/router'
 class ShakeRacer < Goliath::WebSocket
   use(Rack::Static,
       :root => Goliath::Application.app_path("public"),
-      :urls => ['/test_phonegap.html', '/arena.html', '/index.html', '/css', '/themes', '/js', '/img'])
+      :urls => ['/blue.html', '/red.html', '/arena.html', '/index.html', '/css', '/themes', '/js', '/img'])
 
   def on_open(env)
     env.logger.info("WS OPEN")
@@ -43,8 +43,11 @@ class ShakeRacer < Goliath::WebSocket
   def response(env)
     env.logger.info("request path: #{env['REQUEST_PATH']}")
     case env['REQUEST_PATH']
-    when '/ws'
-      env['subscriptions'] = ["players.#"]
+    when '/blue'
+      env['subscriptions'] = ["team.blue"]
+      super(env)
+    when '/red'
+      env['subscriptions'] = ["team.red"]
       super(env)
     when '/arena_ws'
       env["subscriptions"] = ["arena.#"]
