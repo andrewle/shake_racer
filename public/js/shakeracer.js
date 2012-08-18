@@ -40,17 +40,22 @@ $(document).ready(function() {
     console.log(data);
   });
 
-  window.ondevicemotion = function (event) {
-    return;
-    // nothing to do if there websocket is not connected
-    if(!ws) { return; }
+  $('body').on("countdown", function(event, data) {
+    // when the count is 0, grab all motion
+    if(data.count === 0) {
+      window.ondevicemotion = function (event) {
+        var message = JSON.stringify({
+          x: event.acceleration.x,
+          y: event.acceleration.y,
+          z: event.acceleration.z
+        });
 
-    var message = JSON.stringify({
-      x: event.acceleration.x,
-      y: event.acceleration.y,
-      z: event.acceleration.z
-    });
+        ws.send(message);
+      }
+    }
+  });
 
-    ws.send(message);
-  }
+  $('body').on("new_match", function(event, data) {
+    window.ondevicemotion = null;
+  });
 });
