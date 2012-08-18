@@ -6,6 +6,11 @@ var racers = [
 var registry = null;
 var ws = null;
 
+// keep track of the number of times the websocket has connected
+var numTimesConnected = 0;
+
+function debug(str) { };
+
 function handleMessage(message) {
   switch(message.event) {
       case "UpdateScores":
@@ -103,6 +108,10 @@ function connect() {
     //$("#msg").append("<p>" + evt.data + "</p>");
     handleMessage(JSON.parse(evt.data));
   };
+}
+
+function reload() {
+    document.location = document.location.href;
 }
 
 $(function () {
