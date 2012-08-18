@@ -1,24 +1,21 @@
 require_relative 'application_model'
 
 class Match < ApplicationModel
-  attr_accessor :team_name1, :team_name2, :score1, :score2, :seconds_left
+  attr_accessor :teams, :scores, :seconds_left
 
   HZ = 25
-  PERIOD = 1.0/HZ
+  PERIOD_SECONDS = 1.0/HZ
   MATCH_SECONDS = 10.0
   COUNTDOWN_SECONDS = 3
 
   def initialize(server, team_name1, team_name2)
     super(server)
-    @team_name1 = team_name1
-    @team_name2 = team_name2
-    @score1 = 0
-    @score2 = 0
-    @seconds_left = 0.0
+    @team_names = [team_name1, team_name2]
+    @scores     = [0, 0]
   end
 
   def match_name
-    "#{team_name1} vs. #{team_name2}"
+    @team_names * ' vs. '
   end
 
   def send_countdown(count)
@@ -34,8 +31,16 @@ class Match < ApplicationModel
     message =
     {
       :event  => 'UpdateScores',
-      :racers => [{:name => @team_name1, :score => @score1},
-                  {:name => @team_name2, :score => @score2}]
+      :racers => [{:name => @team_names[0], :score => @scores[0]},
+                  {:name => @team_names[1], :score => @scores[1]}]
+    }
+    send_message(message)
+  end
+
+  def send_new_match
+    message =
+    {
+      :event  => 'NewMatch'
     }
     send_message(message)
   end
@@ -52,6 +57,7 @@ class Match < ApplicationModel
   end
 
   def start!(&block)
+    send_new_match
     countdown do
       run!(&block)
     end
@@ -59,24 +65,21 @@ class Match < ApplicationModel
 
   def update_score
     increment = rand(4)
-    if rand < 0.5
-      @score1 += [increment, 100].min
-    else
-      @score2 += [increment, 100].min
-    end
+    player = rand < 0.5 ? 0 : 1
+    @scores[player] = [@scores[player] + increment, 100].min
   end
 
   def run!
     @seconds_left = MATCH_SECONDS
-    timer = EM.add_periodic_timer(PERIOD) do
+    timer = EM.add_periodic_timer(PERIOD_SECONDS) do
       update_score
       send_score
-      @seconds_left -= PERIOD
-      @seconds_left = 0 if [@score1, @score2].max >= 100
+      @seconds_left -= PERIOD_SECONDS
+      @seconds_left = 0 if @scores.max >= 100
       if @seconds_left <= 0.0
         @seconds_left = 0.0
         timer.cancel
-        puts("#{match_name} match over!")
+        @server.logger.info("#{match_name} match over!")
         yield # done!
       end
     end
@@ -84,10 +87,8 @@ class Match < ApplicationModel
 
   def to_hash
     {
-      team_name1: @team_name1,
-      team_name2: @team_name2,
-      score1:     @score1,
-      score2:     @score2,
+      team_names:   @team_names,
+      scores:       @scores,
       seconds_left: @seconds_left
     }
   end

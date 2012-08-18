@@ -7,6 +7,6 @@ class ApplicationModel
 
   def send_message(message)
     @server.config['channel'] << JSON.generate(message)
-#    @server.logger.info "send: #{JSON.generate(message)}"
+    @server.logger.info "send: #{JSON.pretty_generate(message)}"
   end
 end

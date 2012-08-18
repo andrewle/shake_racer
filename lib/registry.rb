@@ -13,6 +13,7 @@ class Registry < ApplicationModel
 
   def start_next_match
     if match = matches.shift
+      send_update
       match.start! do
         EM.add_timer(INTER_MATCH_DELAY) do
           start_next_match
@@ -30,8 +31,17 @@ class Registry < ApplicationModel
   def to_hash
     {
       matches:  @matches.map(&:to_hash),
-      teams:    @teams.map(&:to_hash)
+      teams:    @teams  .map(&:to_hash)
     }
+  end
+
+  def send_update
+    message =
+    {
+      key:      'Update',
+      registry: to_hash
+    }
+    send_message(message)
   end
 
   def to_json
