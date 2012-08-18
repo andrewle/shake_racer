@@ -6,8 +6,8 @@ class Match
   MATCH_SECONDS = 10.0
   COUNTDOWN_SECONDS = 3
 
-  def initialize(logger, team_name1, team_name2)
-    @logger = logger
+  def initialize(server, team_name1, team_name2)
+    @server = server
     @team_name1 = team_name1
     @team_name2 = team_name2
     @score1 = 0
@@ -20,7 +20,7 @@ class Match
   end
 
   def countdown(count = COUNTDOWN_SECONDS, &block)
-    @logger.info "#{count}!"
+    @server.logger.info "#{count}!"
     EM.add_timer(1) do
       if count > 1
         countdown(count - 1, &block)
@@ -39,7 +39,9 @@ class Match
   def run!
     @seconds_left = MATCH_SECONDS
     timer = EM.add_periodic_timer(PERIOD) do
-      puts("#{match_name} #{@seconds_left}")
+      scores = { :racers => [{:name => @team_name1, :score => @score1},
+                             {:name => @team_name2, :score => @score2}] }
+      @server.config['channel'] << JSON.generate(scores)
       @seconds_left -= PERIOD
       if @seconds_left <= 0.0
         @seconds_left = 0.0

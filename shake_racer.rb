@@ -14,6 +14,11 @@ class ShakeRacer < Goliath::WebSocket
       :root => Goliath::Application.app_path("public"),
       :urls => ['/arena.html', '/index.html', '/css', '/themes', '/js', '/img'])
 
+  def post_init
+    env.logger.info("post_init")
+    super
+  end
+
   def on_open(env)
     env.logger.info("WS OPEN")
     env['subscription'] = env.channel.subscribe { |m| env.stream_send(m) }

@@ -1,8 +1,8 @@
 class Team
   attr_accessor :name
 
-  def initialize(logger, name)
-    @logger = logger
+  def initialize(server, name)
+    @server = server
     @name = name
     @members = []
   end

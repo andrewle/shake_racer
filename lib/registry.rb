@@ -5,8 +5,8 @@ class Registry
 
   INTER_MATCH_DELAY = 3.0
 
-  def initialize(logger)
-    @logger = logger
+  def initialize(server)
+    @server = server
     @matches = [] # ordered
     @teams = []
   end
