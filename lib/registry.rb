@@ -57,7 +57,7 @@ class Registry < ApplicationModel
 
   def dispatch_shake(message_hash, env)
     acceleration = message_hash['acceleration'] or raise ArgumentError, "Missing acceleration in #{message_hash.inspect}"
-    match = matches.first or raise ArgumentError, "Got Shake with no matches #{message_hash.inspect}"
+    match = matches.first or return
     match.shake(env['team_name'], acceleration)
   end
 
