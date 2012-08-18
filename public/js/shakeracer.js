@@ -9,7 +9,8 @@ $(document).ready(function() {
     return;
   }
 
-  var ws = new WebSocket("ws://localhost:9000/ws");
+  var host = window.location.host;
+  var ws = new WebSocket("ws://" + host + "/ws");
   ws.onmessage = function (evt) { $("#msg").append("<p>" + evt.data + "</p>"); };
   ws.onclose = function () { debug("socket closed"); };
   ws.onopen = function () { debug("connected..."); };
