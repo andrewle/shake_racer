@@ -6,7 +6,6 @@ require 'goliath/websocket'
 
 require_relative 'lib/registry'
 require_relative 'lib/team'
-require_relative 'lib/member'
 require_relative 'lib/match'
 require_relative 'lib/router'
 
