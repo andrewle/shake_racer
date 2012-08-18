@@ -3,42 +3,23 @@
   <head>
     <title>Acceleration Example</title>
 
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js'></script>
     <script type="text/javascript" charset="utf-8" src="/js/phonegap-1.4.1.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/js/shakeracer_common.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/js/shakeracer.js"></script>
+    <script type="text/javascript">
+      function sendAcceleration(x, y, z) {
+        $('#msg').append('<p>' + [x, y, z] + '</p>');
+      }
+
+      function test() {
+        startRace();
+      }
+    </script>
   </head>
+
   <body onload="test()">
     <h1>Example</h1>
     <div id="msg"></div>
-
-    <script type="text/javascript" charset="utf-8">
-    // Wait for PhoneGap to load
-    //
-    document.addEventListener("deviceready", onDeviceReady, false);
-
-    // PhoneGap is ready
-    //
-    function onDeviceReady() {
-        navigator.accelerometer.watchAcceleration(onSuccess, onError, {frequency: 50});
-    }
-
-    // onSuccess: Get a snapshot of the current acceleration
-    //
-    function onSuccess(acceleration) {
-        var msg = document.getElementById('msg');
-        var html = msg.innerHTML;
-
-        msg.innerHTML = html + '<p>' + acceleration.y + '</p>';
-
-        //alert('Acceleration X: ' + acceleration.x + '\n' +
-        //      'Acceleration Y: ' + acceleration.y + '\n' +
-        //      'Acceleration Z: ' + acceleration.z + '\n' +
-        //      'Timestamp: '      + acceleration.timestamp + '\n');
-    }
-
-    // onError: Failed to get the acceleration
-    //
-    function onError() {
-        alert('onError!');
-    }
-    </script>
   </body>
 </html>

@@ -44,7 +44,7 @@ class Registry < ApplicationModel
     from_team = message_hash['from_team'] or raise ArgumentError, "Missing from_team in #{message_hash.inspect}"
     to_team   = message_hash['to_team'  ] or raise ArgumentError, "Missing to_team in #{message_hash.inspect}"
     matches << Match.new(server, from_team, to_team)
-    send_message(message_hash, "team.#{from_team}") # forward to all
+    send_message(message_hash, "team.#{from_team}")
     send_update
   end
 
@@ -72,12 +72,7 @@ class Registry < ApplicationModel
     end
   end
 
-  def to_hash
-    {
-      matches:  @matches.map(&:to_hash),
-      teams:    @teams  .map(&:to_hash)
-    }
-  end
+  # Message senders
 
   def send_update
     message =
@@ -101,6 +96,13 @@ class Registry < ApplicationModel
       :message => error_message
     }
     env.stream_send(JSON.generate(message))
+  end
+
+  def to_hash
+    {
+      matches:  @matches.map(&:to_hash),
+      teams:    @teams  .map(&:to_hash)
+    }
   end
 
   def to_json
