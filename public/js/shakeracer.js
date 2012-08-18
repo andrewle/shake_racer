@@ -1,23 +1,20 @@
-function debug(str)
-{
+function debug(str) {
   $("#debug").append("<p>" + str + "</p>");
 };
 
-$(document).ready(function()
-{
-  if (!("WebSocket" in window))
-  {
+$(document).ready(function() {
+
+  if (!("WebSocket" in window)) {
     alert("Sorry, WebSockets unavailable.");
     return;
   }
 
   var ws = new WebSocket("ws://localhost:9000/ws");
-  ws.onmessage = function(evt) { $("#msg").append("<p>" + evt.data + "</p>"); };
-  ws.onclose = function() { debug("socket closed"); };
-  ws.onopen = function() { debug("connected..."); };
+  ws.onmessage = function (evt) { $("#msg").append("<p>" + evt.data + "</p>"); };
+  ws.onclose = function () { debug("socket closed"); };
+  ws.onopen = function () { debug("connected..."); };
 
-  $('#submit').click(function()
-  {
+  $('#submit').click(function () {
     var nick = $('#nick').val();
     var msg = $('#message').val();
 
@@ -25,8 +22,7 @@ $(document).ready(function()
     return false;
   });
 
-  window.ondevicemotion = function(event)
-  {
+  window.ondevicemotion = function (event) {
     // nothing to do if there websocket is not connected
     if(!ws) { return; }
 
