@@ -31,6 +31,8 @@ function handleMessage(message) {
         newMatch();
 
         break;
+      default:
+        alert('Unknown event "' + message.event + '"');
   }
 }
 
