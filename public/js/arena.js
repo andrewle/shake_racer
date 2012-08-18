@@ -52,7 +52,7 @@ $(function () {
   ws.onopen = function () { debug("connected..."); };
 
   ws.onmessage = function (evt) {
-    $("#msg").append("<p>" + evt.data + "</p>");
+    //$("#msg").append("<p>" + evt.data + "</p>");
     handleMessage(JSON.parse(evt.data));
   };
 });
