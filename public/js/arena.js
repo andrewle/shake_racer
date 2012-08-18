@@ -40,7 +40,11 @@ $(function () {
   var host = window.location.host;
   var ws = new WebSocket("ws://" + host + "/ws");
 
-  ws.onmessage = function (evt) { $("#msg").append("<p>" + evt.data + "</p>"); };
   ws.onclose = function () { debug("socket closed"); };
   ws.onopen = function () { debug("connected..."); };
+
+  ws.onmessage = function (evt) {
+    $("#msg").append("<p>" + evt.data + "</p>");
+    handleMessage(JSON.parse(evt.data));
+  };
 });
