@@ -46,6 +46,7 @@ function countdown(count) {
 function newMatch(message) {
   var team_names = message['match']['team_names'];
 
+  $('#banner').hide();
   $('#curtain').fadeTo(125, 1.0);
   $('#curtain .match').html(team_names[0] + ' VS ' + team_names[1]);
   countdown('');
@@ -80,6 +81,11 @@ function redraw() {
     // how full the container should be
     var score = racers[i].score
     var fillPercentage = (score / maxValue) * 100;
+
+    if(fillPercentage >= 100) {
+        $('#banner').html(racers[i]);
+        $('#banner').show();
+    }
 
     // update the racer's CSS
     fill.css('height', (100 - fillPercentage) + '%');
