@@ -6,7 +6,7 @@ class Match < ApplicationModel
   HZ = 25
   PERIOD_SECONDS = 1.0/HZ
   MATCH_SECONDS = 10.0
-  COUNTDOWN_SECONDS = 3
+  COUNTDOWN_SECONDS = 5
 
   def initialize(server, team_name1, team_name2)
     super(server)
