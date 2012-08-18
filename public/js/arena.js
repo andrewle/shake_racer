@@ -1,6 +1,8 @@
 var maxValue = 100;
 var data = [0, 0];
 
+function debug(str) { };
+
 /**
  * Redraw the racer bars based on the data array.
  *
@@ -26,3 +28,12 @@ function redraw() {
     fill.css('top', topPercentage + '%');
   }
 }
+
+$(function () {
+  var host = window.location.host;
+  var ws = new WebSocket("ws://" + host + "/ws");
+
+  ws.onmessage = function (evt) { $("#msg").append("<p>" + evt.data + "</p>"); };
+  ws.onclose = function () { debug("socket closed"); };
+  ws.onopen = function () { debug("connected..."); };
+});
