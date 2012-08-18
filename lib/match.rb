@@ -18,34 +18,6 @@ class Match < ApplicationModel
     @team_names * ' vs. '
   end
 
-  def send_countdown(count)
-    message =
-    {
-      :event => "Countdown",
-      :count => count
-    }
-    send_message(message, '')
-  end
-
-  def send_score
-    message =
-    {
-      :event  => 'UpdateScores',
-      :racers => [{:name => @team_names[0], :score => @scores[0]},
-                  {:name => @team_names[1], :score => @scores[1]}]
-    }
-    send_message(message, 'arena.update_score')
-  end
-
-  def send_new_match
-    message =
-    {
-      :event  => 'NewMatch',
-      :match  => to_hash
-    }
-    send_message(message, '')
-  end
-
   def countdown(count = COUNTDOWN_SECONDS, &block)
     send_countdown(count)
     EM.add_timer(1) do
@@ -89,9 +61,39 @@ class Match < ApplicationModel
     team_names.each_with_index { |team, index| team_index = index if team == team_name }
     team_index or raise ArgumentError "Team #{team_name} not found in #{to_hash.inspect}"
     increment = rand(4)
-    player = rand < 0.5 ? 0 : 1
     @scores[team_index] = [@scores[team_index] + increment, 100].min
     send_score
+  end
+
+  private
+  # Message senders
+
+  def send_countdown(count)
+    message =
+    {
+      :event => "Countdown",
+      :count => count
+    }
+    send_message(message, '')
+  end
+
+  def send_score
+    message =
+    {
+      :event  => 'UpdateScores',
+      :racers => [{:name => @team_names[0], :score => @scores[0]},
+                  {:name => @team_names[1], :score => @scores[1]}]
+    }
+    send_message(message, 'arena.update_score')
+  end
+
+  def send_new_match
+    message =
+    {
+      :event  => 'NewMatch',
+      :match  => to_hash
+    }
+    send_message(message, '')
   end
 
   def to_hash
