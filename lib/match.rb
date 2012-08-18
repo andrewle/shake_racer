@@ -3,7 +3,8 @@ class Match
 
   HZ = 25
   PERIOD = 1.0/HZ
-  MATCH_SECONDS = 30.0
+  MATCH_SECONDS = 10.0
+  COUNTDOWN_SECONDS = 3
 
   def initialize(logger, team_name1, team_name2)
     @logger = logger
@@ -14,15 +15,37 @@ class Match
     @seconds_left = 0.0
   end
 
-  def start!
+  def match_name
+    "#{team_name1} vs. #{team_name2}"
+  end
+
+  def countdown(count = COUNTDOWN_SECONDS, &block)
+    @logger.info "#{count}!"
+    EM.add_timer(1) do
+      if count > 1
+        countdown(count - 1, &block)
+      else
+        yield
+      end
+    end
+  end
+
+  def start!(&block)
+    countdown do
+      run!(&block)
+    end
+  end
+
+  def run!
     @seconds_left = MATCH_SECONDS
     timer = EM.add_periodic_timer(PERIOD) do
-      puts("timer!")
+      puts("#{match_name} #{@seconds_left}")
       @seconds_left -= PERIOD
       if @seconds_left <= 0.0
         @seconds_left = 0.0
         timer.cancel
-        puts("match over!")
+        puts("#{match_name} match over!")
+        yield # done!
       end
     end
   end
