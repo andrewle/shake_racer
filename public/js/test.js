@@ -9,7 +9,7 @@ function next() {
   update();
   redraw();
 
-  if(Array.max(data) >= maxValue) {
+  if(Array.max(racers) >= maxValue) {
     clearInterval(interval);
   }
 }
