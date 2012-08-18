@@ -8,6 +8,7 @@ require_relative 'lib/registry'
 require_relative 'lib/team'
 require_relative 'lib/member'
 require_relative 'lib/match'
+require_relative 'lib/router'
 
 class ShakeRacer < Goliath::WebSocket
   use(Rack::Static,
@@ -16,7 +17,7 @@ class ShakeRacer < Goliath::WebSocket
 
   def on_open(env)
     env.logger.info("WS OPEN")
-    env['subscription'] = env.channel.subscribe { |m| env.stream_send(m) }
+    env['subscription_id'] = env.channel.connect(env)
   end
 
 #  def on_headers(env, headers)
@@ -27,12 +28,12 @@ class ShakeRacer < Goliath::WebSocket
 
   def on_message(env, msg)
     env.logger.info("WS MESSAGE: #{msg}")
-    env.channel << msg
+    env.channel.send(msg, "arena.update")
   end
 
   def on_close(env)
     env.logger.info("WS CLOSED")
-    env.channel.unsubscribe(env['subscription'])
+    env.channel.disconnect(env['subscription_id'])
   end
 
   def on_error(env, error)
@@ -43,9 +44,10 @@ class ShakeRacer < Goliath::WebSocket
     env.logger.info("request path: #{env['REQUEST_PATH']}")
     case env['REQUEST_PATH']
     when '/ws'
+      env['subscriptions'] = ["players.#"]
       super(env)
     when '/arena_ws'
-      env['client.tag'] = 'arena'
+      env["subscriptions"] = ["arena.#"]
       super(env)
     end
   end
