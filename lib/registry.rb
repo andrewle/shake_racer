@@ -24,14 +24,20 @@ class Registry < ApplicationModel
 
   def dispatch_register(message_hash, env)
     team_name = message_hash['team'] or raise ArgumentError, "Missing team in #{message_hash.inspect}"
-    team = Team.new(server, team_name)
+    if team = teams.find { |team| team.name == team_name }
+      if team.members.size >= 2
+        send_error('register', "Only 2 team members allowed", env)
+        return
+      end
+    else
+      team = Team.new(server, team_name)
+      teams << team
+    end
     team.members << Member.new(server, nil) # TODO: connection_id -Colin
-    teams << team
     env['team_name'] = team_name
     env.channel.subscribe("team.#{team_name}", env['subscription_id'], env)
     send_success("register", env)
     send_update
-    # send_error("register", "Too many members", env)
   end
 
   def dispatch_challenge(message_hash, env)
@@ -78,25 +84,10 @@ class Registry < ApplicationModel
   def send_update
     message =
     {
-      event:    'Update',
+      event:    'update',
       registry: to_hash
     }
     send_message(message, '')
-  end
-
-  def send_success(event, env)
-    message = {
-      :event => event + "_success"
-    }
-    env.stream_send(JSON.generate(message))
-  end
-
-  def send_error(event, error_message, env)
-    message = {
-      :event => event + "_error",
-      :message => error_message
-    }
-    env.stream_send(JSON.generate(message))
   end
 
   def to_hash

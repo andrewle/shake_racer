@@ -13,24 +13,26 @@ function debug(str) { };
 
 function handleMessage(message) {
   switch(message.event) {
-      case "UpdateScores":
+      case "update_scores":
         racers = message.racers;
         redraw();
 
         break;
-      case "Update":
+      case "update":
         registry = message.registry;
         updateUpcomingRaces();
 
         break;
-      case "Countdown":
+      case "countdown":
         countdown(message.count);
 
         break;
-      case "NewMatch":
+      case "new_match":
         newMatch();
 
         break;
+      default:
+        alert('Unknown event "' + message.event + '"');
   }
 }
 
