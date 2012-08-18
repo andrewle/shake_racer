@@ -24,4 +24,18 @@ $(document).ready(function()
     ws.send(nick + ": " + msg);
     return false;
   });
+
+  window.ondevicemotion = function(event)
+  {
+    // nothing to do if there websocket is not connected
+    if(!ws) { return; }
+
+    var message = JSON.stringify({
+      x: event.acceleration.x,
+      y: event.acceleration.y,
+      z: event.acceleration.z
+    });
+
+    ws.send(message);
+  }
 });
