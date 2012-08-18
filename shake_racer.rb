@@ -40,7 +40,6 @@ class ShakeRacer < Goliath::WebSocket
   end
 
   def response(env)
-    env.logger.info("ua: #{env['client-headers']['User-Agent']}")
     env.logger.info("request path: #{env['REQUEST_PATH']}")
     case env['REQUEST_PATH']
     when '/ws'
