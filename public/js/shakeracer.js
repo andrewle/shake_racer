@@ -1,5 +1,5 @@
 function debug(str) {
-  $("#debug").append(str);
+  $("#debug").append(str + "\n");
 };
 
 $(document).ready(function() {
@@ -23,7 +23,7 @@ $(document).ready(function() {
 
   var host = window.location.host;
   var ws = new WebSocket("ws://" + host + "/ws");
-  ws.onmessage = function (evt) { $("#msg").append("<p>" + evt.data + "</p>"); };
+  ws.onmessage = function (evt) { debug(evt.data); };
   ws.onclose = function () { debug("socket closed"); };
   ws.onopen = function () { debug("connected..."); };
 
