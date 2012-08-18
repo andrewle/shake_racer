@@ -1,8 +1,11 @@
 function update() {
   var index = Math.random() < 0.5 ? 0 : 1;
+  var newData = racers.slice(0);
 
-  data[index] += parseInt(Math.random() * 5);
-  data[index] = Array.min([maxValue, data[index]]);
+  newData[index] += parseInt(Math.random() * 5);
+  newData[index] = Array.min([maxValue, newData[index]]);
+
+  handleMessage({racers: newData});
 }
 
 function next() {
