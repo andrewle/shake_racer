@@ -25,7 +25,7 @@ class Registry < ApplicationModel
   def dispatch_register(message_hash, env)
     team_name = message_hash['team'] or raise ArgumentError, "Missing team in #{message_hash.inspect}"
     if team = teams.find { |team| team.name == team_name }
-      if team.members.size >= 2
+      if team.member_count >= 2
         send_error('register', "Only 2 team members allowed", env)
         return
       end
@@ -33,7 +33,7 @@ class Registry < ApplicationModel
       team = Team.new(server, team_name)
       teams << team
     end
-    team.members << Member.new(server, nil) # TODO: connection_id -Colin
+    team.inc_members
     env['team_name'] = team_name
     env.channel.subscribe("team.#{team_name}", env['subscription_id'], env)
     send_success("register", env)
@@ -73,10 +73,15 @@ class Registry < ApplicationModel
     end
   end
 
-  def find_team_for_member(member_id)
-    @teams.find do |team|
-      team.find_member(member_id)
+  def find_team(team_name)
+    @teams.find { |team| team.name == team_name }
+  end
+
+  def dec_members(env)
+    if team = find_team(env['team_name'])
+      team.dec_members
     end
+    send_update
   end
 
   # Message senders
