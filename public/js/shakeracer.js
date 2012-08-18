@@ -1,7 +1,3 @@
-function debug(str) {
-  $("#debug").append(str + "\n");
-};
-
 $(document).ready(function() {
   var player = {
     hasJoinedTeam: false
@@ -23,9 +19,13 @@ $(document).ready(function() {
 
   var host = window.location.host;
   var ws = new WebSocket("ws://" + host + "/ws");
-  ws.onmessage = function (evt) { debug(evt.data); };
-  ws.onclose = function () { debug("socket closed"); };
-  ws.onopen = function () { debug("connected..."); };
+
+  ws.onmessage = function (evt) {
+  };
+
+  ws.onclose = function () {
+    alert("Alert connection to server lost.");
+  };
 
   $('#submit').click(function () {
     var nick = $('#nick').val();
