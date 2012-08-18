@@ -1,7 +1,7 @@
 require_relative 'application_model'
 
 class Match < ApplicationModel
-  attr_accessor :teams, :scores, :seconds_left
+  attr_accessor :teams, :scores, :seconds_left, :team_names
 
   HZ = 25
   PERIOD_SECONDS = 1.0/HZ
@@ -58,8 +58,11 @@ class Match < ApplicationModel
   end
 
   def shake(team_name, acceleration)
-    team_names.each_with_index { |team, index| team_index = index if team == team_name }
-    team_index or raise ArgumentError "Team #{team_name} not found in #{to_hash.inspect}"
+    team_index = -1
+    team_names.each_with_index { |team, index|
+      team_index = index if team == team_name
+    }
+    return if team_index == -1
     increment = acceleration[1]/4
     @scores[team_index] = [@scores[team_index] + increment, 100].min
     send_score
@@ -96,6 +99,7 @@ class Match < ApplicationModel
     send_message(message, '')
   end
 
+  public
   def to_hash
     {
       team_names:   @team_names,

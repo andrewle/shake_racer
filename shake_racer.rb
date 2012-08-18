@@ -17,13 +17,12 @@ class ShakeRacer < Goliath::WebSocket
   def on_open(env)
     env.logger.info("WS OPEN")
     env['subscription_id'] = env.channel.connect(env)
-  end
 
-#  def on_headers(env, headers)
-#    super
-#    env.logger.info 'proxying new request: ' + headers.inspect
-#    env['client-headers'] = headers
-#  end
+    if env.teams[:blue] >= 1 && env.teams[:red] >= 1
+      env.registry.matches << Match.new(env, "blue", "red")
+      env.registry.start_next_match
+    end
+  end
 
   def on_message(env, msg)
     env.logger.info("WS MESSAGE: #{msg}")
@@ -31,9 +30,13 @@ class ShakeRacer < Goliath::WebSocket
   end
 
   def on_close(env)
-    env.registry.dec_members(env)
     env.logger.info("WS CLOSED")
     env.channel.disconnect(env['subscription_id'])
+    if env['subscriptions'] == "team.blue"
+      env.teams[:blue] -= 1
+    elsif env['subscriptions'] == "team.red"
+      env.teams[:red] -= 1
+    end
   end
 
   def on_error(env, error)
@@ -44,13 +47,15 @@ class ShakeRacer < Goliath::WebSocket
     env.logger.info("request path: #{env['REQUEST_PATH']}")
     case env['REQUEST_PATH']
     when '/blue'
-      env['subscriptions'] = ["team.blue"]
+      env['subscriptions'] = "team.blue"
+      env.teams[:blue] += 1
       super(env)
     when '/red'
-      env['subscriptions'] = ["team.red"]
+      env['subscriptions'] = "team.red"
+      env.teams[:red] += 1
       super(env)
     when '/arena_ws'
-      env["subscriptions"] = ["arena.#"]
+      env["subscriptions"] = "arena.#"
       super(env)
     end
   end

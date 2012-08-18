@@ -25,23 +25,27 @@ $(document).ready(function() {
     }
   });
 
+  var inMotion = false;
+
+  window.ondevicemotion = function (evt) {
+    if (inMotion === false) { return; }
+    var message = JSON.stringify({
+      event: "shake",
+      team: endpoint,
+      acceleration: [evt.acceleration.x, evt.acceleration.y, evt.acceleration.z]
+    });
+
+    ws.send(message);
+  }
+
   $('body').on("countdown", function(event, data) {
     // when the count is 0, grab all motion
     if(data.count === 0) {
-      window.ondevicemotion = function (event) {
-        var message = JSON.stringify({
-          team: endpoint,
-          x: event.acceleration.x,
-          y: event.acceleration.y,
-          z: event.acceleration.z
-        });
-
-        ws.send(message);
-      }
+      inMotion = true;
     }
   });
 
   $('body').on("new_match", function(event, data) {
-    window.ondevicemotion = null;
+    inMotion = false;
   });
 });
