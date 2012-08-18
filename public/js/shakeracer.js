@@ -1,4 +1,6 @@
-function debug(str) { };
+function debug(str) {
+  $("#debug").append(str);
+};
 
 $(document).ready(function() {
   var player = {
