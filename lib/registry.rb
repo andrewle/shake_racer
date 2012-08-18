@@ -3,7 +3,8 @@ require 'json'
 class Registry
   attr_accessor :matches, :teams
 
-  def initialize
+  def initialize(logger)
+    @logger = logger
     @matches = [] # ordered
     @teams = []
   end

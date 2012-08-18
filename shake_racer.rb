@@ -4,6 +4,11 @@ require "bundler/setup"
 require "goliath"
 require 'goliath/websocket'
 
+require_relative 'lib/registry'
+require_relative 'lib/team'
+require_relative 'lib/member'
+require_relative 'lib/match'
+
 class ShakeRacer < Goliath::WebSocket
   use(Rack::Static,
       :root => Goliath::Application.app_path("public"),
