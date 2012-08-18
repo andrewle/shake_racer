@@ -3,7 +3,7 @@ require_relative 'application_model'
 class Registry < ApplicationModel
   attr_accessor :matches, :teams
 
-  INTER_MATCH_DELAY = 3.0
+  INTER_MATCH_SECONDS = 3.0
 
   def initialize(server)
     super(server)
@@ -15,7 +15,7 @@ class Registry < ApplicationModel
     if match = matches.shift
       send_update
       match.start! do
-        EM.add_timer(INTER_MATCH_DELAY) do
+        EM.add_timer(INTER_MATCH_SECONDS) do
           start_next_match
         end unless matches.empty?
       end

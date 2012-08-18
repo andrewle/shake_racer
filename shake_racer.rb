@@ -14,15 +14,16 @@ class ShakeRacer < Goliath::WebSocket
       :root => Goliath::Application.app_path("public"),
       :urls => ['/arena.html', '/index.html', '/css', '/themes', '/js', '/img'])
 
-  def post_init
-    env.logger.info("post_init")
-    super
-  end
-
   def on_open(env)
     env.logger.info("WS OPEN")
     env['subscription'] = env.channel.subscribe { |m| env.stream_send(m) }
   end
+
+#  def on_headers(env, headers)
+#    super
+#    env.logger.info 'proxying new request: ' + headers.inspect
+#    env['client-headers'] = headers
+#  end
 
   def on_message(env, msg)
     env.logger.info("WS MESSAGE: #{msg}")
@@ -39,6 +40,14 @@ class ShakeRacer < Goliath::WebSocket
   end
 
   def response(env)
-    super(env) if env['REQUEST_PATH'] == '/ws'
+    env.logger.info("ua: #{env['client-headers']['User-Agent']}")
+    env.logger.info("request path: #{env['REQUEST_PATH']}")
+    case env['REQUEST_PATH']
+    when '/ws'
+      super(env)
+    when '/arena_ws'
+      env['client.tag'] = 'arena'
+      super(env)
+    end
   end
 end

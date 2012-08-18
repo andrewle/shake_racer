@@ -40,7 +40,8 @@ class Match < ApplicationModel
   def send_new_match
     message =
     {
-      :event  => 'NewMatch'
+      :event  => 'NewMatch',
+      :match  => to_hash
     }
     send_message(message)
   end
