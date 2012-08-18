@@ -5,7 +5,7 @@ class Match < ApplicationModel
 
   HZ = 25
   PERIOD_SECONDS = 1.0/HZ
-  MATCH_SECONDS = 10.0
+  MATCH_SECONDS = 30.0
   COUNTDOWN_SECONDS = 5
 
   def initialize(server, team_name1, team_name2)
@@ -57,10 +57,10 @@ class Match < ApplicationModel
     end
   end
 
-  def shake(team_name)
+  def shake(team_name, acceleration)
     team_names.each_with_index { |team, index| team_index = index if team == team_name }
     team_index or raise ArgumentError "Team #{team_name} not found in #{to_hash.inspect}"
-    increment = rand(4)
+    increment = acceleration[1]/4
     @scores[team_index] = [@scores[team_index] + increment, 100].min
     send_score
   end
