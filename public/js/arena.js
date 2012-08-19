@@ -42,7 +42,7 @@ function handleMessage(message) {
 }
 
 function matchEnded(message) {
-    var winner = percentages[0] > percentages[1] : 'blue' ? 'red';
+    var winner = percentages[0] > percentages[1] ? 'blue' : 'red';
 
     $('#banner').html(winner + ' wins!');
     $('#banner').show();
